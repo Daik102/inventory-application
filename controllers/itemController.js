@@ -7,9 +7,10 @@ export const getIndexPage = (req, res) => {
 
 export const getItemPage = async (req, res, next) => {
   try {
-    const items = await db.getAllItems();
+    const { sort = 'id', order = 'asc', search = '' } = req.query;
+    const items = await db.getAllItems(sort, order, search);
     console.log(items);
-    res.render('items', { title: 'Weapon Inventory', items });
+    res.render('items', { title: 'Weapon Inventory', items, sort, order, search });
   } catch (err) {
     next(err);
   }
