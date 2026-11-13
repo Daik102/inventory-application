@@ -1,5 +1,5 @@
 import * as db from '../db/queries.js'; 
-// import { validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 
 export const getIndexPage = (req, res) => {
   res.render('index', { title: 'Mini Weapon Shop' });
@@ -16,17 +16,15 @@ export const getItemPage = async (req, res, next) => {
 };
 
 export const createNewItem = async (req, res, next) => {
-  /*
   const errors = validationResult(req);
   
   if (!errors.isEmpty()) {
     return res.render('new', { 
-      title: 'New Message',
+      title: 'Add Item',
       errors: errors.array(), 
       formData: req.body
     });
   }
-  */
 
   try {
     const { name, type, stock, cost } = req.body;
@@ -38,20 +36,37 @@ export const createNewItem = async (req, res, next) => {
 };
 
 export const getNewPage = (req, res) => {
-  res.render('new', { title: 'Add Item' });
+  res.render('new', { title: 'Add Item', errors: [], formData: {} });
 };
 
 export const getEditItemPage = async (req, res, next) => {
   try {
     const itemId = req.params.id;
     const item = await db.getItemById(itemId);
-    res.render('edit', { title: 'Edit Item', id: itemId, item });
+    res.render('edit', 
+      { title: 'Edit Item', 
+        item: { id: itemId, ...item }, 
+        errors: [], 
+        formData: {} 
+      });
   } catch (err) {
     next(err);
   }
 };
 
 export const editItem = async (req, res, next) => {
+  const itemId = req.params.id;
+  const errors = validationResult(req);
+  
+  if (!errors.isEmpty()) {
+    return res.render('edit', { 
+      title: 'Edit Item',
+      item: { id: itemId, ...req.body }, 
+      errors: errors.array(), 
+      formData: req.body
+    });
+  }
+
   try {
     const itemId = req.params.id;
     const { name, type, stock, cost } = req.body;
@@ -64,12 +79,13 @@ export const editItem = async (req, res, next) => {
 
 export const getDeletePage = async (req, res) => {
   const itemId = req.params.id;
-  res.render('delete', { title: 'Delete Item', id: itemId });
+  const item = await db.getItemById(itemId);
+  res.render('delete', { title: 'Delete Item', id: itemId, name: item.name });
 };
 
 export const deleteItem = async (req, res, next) => {
   try {
-   const itemId = req.params.id;
+    const itemId = req.params.id;
     await db.deleteItem(itemId);
     res.redirect("/items");
   } catch (err) {
