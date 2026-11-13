@@ -1,0 +1,39 @@
+<%- include('partials/header', { title }) %>
+<main>
+  <h1>Mini Weapon Shop</h1>
+  <a href="/items/new">Add Item</a>
+  <table class="rpg-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Type</th>
+        <th class="num">Stock</th>
+        <th class="num">Cost</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (items.length === 0) { %>
+        <tr>
+          <td colspan="5">No items in stock. Add some gear!</td>
+        </tr>
+      <% } else { %>
+        <% items.forEach((item) => { %>
+          <tr>
+            <td><%= item.name %></td>
+            <td><%= item.type %></td>
+            <td class="num"><%= item.stock %></td>
+            <td class="num"><%= item.cost %> G</td>
+            <td>
+              <div class="action-buttons">
+                <a href="/items/<%= item.id %>/edit">Edit</a>
+                <a href="/items/<%= item.id %>/delete">Delete</a>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</main>
+<%- include('partials/footer') %>
