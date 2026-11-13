@@ -1,7 +1,7 @@
 <%- include('partials/header', { title }) %>
 <main>
   <h1>Mini Weapon Shop</h1>
-  <form method="POST" action="/items/<%= id %>/edit">
+  <form method="POST" action="/items/<%= item.id %>/edit">
     <h2>Edit Item</h2>
     <div>
       <label for="item-name">Item: </label>
@@ -20,7 +20,11 @@
       <input type="number" id="item-cost" name="cost" value="<%= item.cost %>">
     </div>
     <p class="error-display">
-      
+      <% if (errors.length > 0) { %>
+        <%= errors[0].msg %>
+      <% } else { %>
+        &nbsp;
+      <% } %>
     </p>
     <a href="/items">Back</a>
     <button type="submit">Edit</button>
