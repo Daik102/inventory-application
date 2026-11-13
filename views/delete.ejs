@@ -1,0 +1,10 @@
+<%- include('partials/header', { title }) %>
+<main>
+  <h1>Mini Weapon Shop</h1>
+  <form method="POST" action="/items/<%= id %>/delete">
+    <h2>Delete This Item?</h2>
+    <a href="/items">Back</a>
+    <button type="submit">Delete</button>
+  </form>
+</main>
+<%- include('partials/footer') %>
