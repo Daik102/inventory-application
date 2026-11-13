@@ -5,22 +5,26 @@
     <h2>New Item</h2>
     <div>
       <label for="item-name">Item: </label>
-      <input type="text" id="item-name" name="name">
+      <input type="text" id="item-name" name="name" value="<%= formData.name || '' %>">
     </div>
     <div>
       <label for="item-type">Type: </label>
-      <input type="text" id="item-type" name="type">
+      <input type="text" id="item-type" name="type" value="<%= formData.type || '' %>">
     </div>
     <div>
       <label for="item-stock">Stock: </label>
-      <input type="number" id="item-stock" name="stock">
+      <input type="number" id="item-stock" name="stock" value="<%= formData.stock || '' %>">
     </div>
     <div>
       <label for="item-cost">Cost: </label>
-      <input type="number" id="item-cost" name="cost">
+      <input type="number" id="item-cost" name="cost" value="<%= formData.cost || '' %>">
     </div>
     <p class="error-display">
-      
+      <% if (errors.length > 0) { %>
+        <%= errors[0].msg %>
+      <% } else { %>
+        &nbsp;
+      <% } %>
     </p>
     <a href="/items">Back</a>
     <button type="submit">Add</button>
