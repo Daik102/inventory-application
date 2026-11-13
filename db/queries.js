@@ -1,8 +1,20 @@
 import { pool } from "./pool.js";
 
-export async function getAllItems() {
-  const { rows } = await pool.query("SELECT * FROM items ORDER BY cost ASC");
+export async function getAllItems(sort = 'id', order = 'asc', search = '') {
+  // Whitelist allowed column names and sort directions
+  const allowedColumns = ['name', 'type', 'stock', 'cost'];
+  const safeColumn = allowedColumns.includes(sort) ? sort : 'id';
+  const safeOrder = order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
+
+  const query = `
+    SELECT * FROM items 
+    WHERE name ILIKE $1 
+    ORDER BY ${safeColumn} ${safeOrder}
+  `;
+  const { rows } = await pool.query(query, [`%${search.trim()}%`]);
   return rows;
+
+  //const { rows } = await pool.query("SELECT * FROM items ORDER BY cost ASC");
 }
 
 export async function insertItem({ name, type, stock, cost }) {
