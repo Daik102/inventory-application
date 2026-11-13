@@ -1,0 +1,29 @@
+<%- include('partials/header', { title }) %>
+<main>
+  <h1>Mini Weapon Shop</h1>
+  <form method="POST" action="/items/<%= id %>/edit">
+    <h2>Edit Item</h2>
+    <div>
+      <label for="item-name">Item: </label>
+      <input type="text" id="item-name" name="name" value="<%= item.name %>">
+    </div>
+    <div>
+      <label for="item-type">Type: </label>
+      <input type="text" id="item-type" name="type" value="<%= item.type %>">
+    </div>
+    <div>
+      <label for="item-stock">Stock: </label>
+      <input type="number" id="item-stock" name="stock" value="<%= item.stock %>">
+    </div>
+    <div>
+      <label for="item-cost">Cost: </label>
+      <input type="number" id="item-cost" name="cost" value="<%= item.cost %>">
+    </div>
+    <p class="error-display">
+      
+    </p>
+    <a href="/items">Back</a>
+    <button type="submit">Edit</button>
+  </form>
+</main>
+<%- include('partials/footer') %>
