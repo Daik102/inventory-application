@@ -1,14 +1,42 @@
 <%- include('partials/header', { title }) %>
 <main>
   <h1>Mini Weapon Shop</h1>
+  <form method="GET" action="/items">
+    <input 
+    type="text" 
+    name="search" 
+    placeholder="Search item name..." 
+    value="<%= locals.search || '' %>" 
+  />
+  <button type="submit">Search</button>
+  <% if (locals.search) { %>
+    <a href="/items">Clear</a>
+  <% } %>
+  </form>
   <a href="/items/new">Add Item</a>
   <table class="rpg-table">
     <thead>
       <tr>
-        <th>Item</th>
-        <th>Type</th>
-        <th class="num">Stock</th>
-        <th class="num">Cost</th>
+        <th>
+          <a href="/items?sort=name&order=<%= sort === 'name' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>">
+            Item <%= sort === 'name' ? (order === 'asc' ? '▲' : '▼') : '' %>
+          </a>
+        </th>
+        <th>
+          <a href="/items?sort=type&order=<%= sort === 'type' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>">
+            Type <%= sort === 'type' ? (order === 'asc' ? '▲' : '▼') : '' %>
+          </a>
+        </th>
+        <th class="num">
+          <a href="/items?sort=stock&order=<%= sort === 'stock' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>">
+            Stock <%= sort === 'stock' ? (order === 'asc' ? '▲' : '▼') : '' %>
+          </a>
+        </th>
+        <th class="num">
+          <a href="/items?sort=cost&order=<%= sort === 'cost' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>">
+            Cost <%= sort === 'cost' ? (order === 'asc' ? '▲' : '▼') : '' %>
+          </a>
+        </th>
         <th>Actions</th>
       </tr>
     </thead>
