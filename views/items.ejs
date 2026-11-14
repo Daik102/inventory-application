@@ -1,43 +1,48 @@
 <%- include('partials/header', { title }) %>
 <main>
   <h1>Mini Weapon Shop</h1>
-  <form method="GET" action="/items">
-    <input 
+  <!-- Add an id="search-input" and id="type-filter" to your form controls -->
+<form action="/items" method="GET" id="filter-form" class="rpg-filter-form">
+  <input 
     type="text" 
+    id="search-input"
     name="search" 
-    placeholder="Search item name..." 
-    value="<%= locals.search || '' %>" 
+    placeholder="Search item..." 
+    autocomplete="off"
   />
-  <button type="submit">Search</button>
-  <% if (locals.search) { %>
-    <a href="/items">Clear</a>
-  <% } %>
-  </form>
+  <select id="type-filter" name="type">
+    <option value="">All Types</option>
+    <% weaponTypes.forEach((weaponType) => { %>
+      <option value="<%= weaponType %>"><%= weaponType %></option>
+    <% }) %>
+  </select>
+  <button type="button" id="clear-btn" style="display: none;">Clear</button>
+</form>
   <a href="/items/new">Add Item</a>
   <table class="rpg-table">
     <thead>
       <tr>
         <th>
-          <a href="/items?sort=name&order=<%= sort === 'name' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>">
+          <a href="/items?sort=name&order=<%= sort === 'name' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>&type=<%= encodeURIComponent(type || '') %>">
             Item <%= sort === 'name' ? (order === 'asc' ? '▲' : '▼') : '' %>
           </a>
         </th>
         <th>
-          <a href="/items?sort=type&order=<%= sort === 'type' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>">
+          <a href="/items?sort=type&order=<%= sort === 'type' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>&type=<%= encodeURIComponent(type || '') %>">
             Type <%= sort === 'type' ? (order === 'asc' ? '▲' : '▼') : '' %>
           </a>
         </th>
         <th class="num">
-          <a href="/items?sort=stock&order=<%= sort === 'stock' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>">
+          <a href="/items?sort=stock&order=<%= sort === 'stock' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>&type=<%= encodeURIComponent(type || '') %>">
             Stock <%= sort === 'stock' ? (order === 'asc' ? '▲' : '▼') : '' %>
           </a>
         </th>
         <th class="num">
-          <a href="/items?sort=cost&order=<%= sort === 'cost' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>">
+          <a href="/items?sort=cost&order=<%= sort === 'cost' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>&type=<%= encodeURIComponent(type || '') %>">
             Cost <%= sort === 'cost' ? (order === 'asc' ? '▲' : '▼') : '' %>
           </a>
         </th>
-        <th>Actions</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -47,22 +52,76 @@
         </tr>
       <% } else { %>
         <% items.forEach((item) => { %>
-          <tr>
+          <tr class="item-row">
             <td><%= item.name %></td>
             <td><%= item.type %></td>
             <td class="num"><%= item.stock %></td>
             <td class="num"><%= item.cost %> G</td>
             <td>
               <div class="action-buttons">
-                <a href="/items/<%= item.id %>/edit">Edit</a>
-                <a href="/items/<%= item.id %>/delete">Delete</a>
+                <a href="/items/<%= item.id %>/edit">E</a>
+                <a href="/items/<%= item.id %>/delete">X</a>
               </div>
             </td>
           </tr>
         <% }) %>
+
+        <!-- Hidden by default; revealed by JS when 0 rows match -->
+        <tr id="no-results-row" style="display: none;">
+          <td colspan="5">No matching gear found!</td>
+        </tr>
       <% } %>
     </tbody>
   </table>
   <a href="/">Back</a>
 </main>
 <%- include('partials/footer') %>
+
+<script>
+  const filterForm = document.getElementById('filter-form');
+  const searchInput = document.getElementById('search-input');
+  const typeFilter = document.getElementById('type-filter');
+  const clearBtn = document.getElementById('clear-btn');
+  const itemRows = document.querySelectorAll('.item-row');
+  const noResultsRow = document.getElementById('no-results-row');
+
+  function filterRows() {
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    const selectedType = typeFilter.value;
+    let visibleCount = 0;
+
+    // Show Clear button only when a filter is active
+    const isFiltered = searchTerm !== '' || selectedType !== '';
+    clearBtn.style.display = isFiltered ? '' : 'none';
+
+    itemRows.forEach((row) => {
+      const itemName = row.children[0].textContent.toLowerCase();
+      const itemType = row.children[1].textContent.trim();
+
+      const matchesSearch = itemName.includes(searchTerm);
+      const matchesType = selectedType === '' || itemType === selectedType;
+
+      if (matchesSearch && matchesType) {
+        row.style.display = '';
+        visibleCount++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    // Toggle the "No matching gear found!" row
+    if (noResultsRow) {
+      noResultsRow.style.display = visibleCount === 0 ? '' : 'none';
+    }
+  }
+
+  filterForm.addEventListener('submit', (e) => e.preventDefault());
+  searchInput.addEventListener('input', filterRows);
+  typeFilter.addEventListener('change', filterRows);
+
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    typeFilter.value = '';
+    filterRows();
+  });
+</script>
