@@ -1,5 +1,6 @@
 import * as db from '../db/queries.js'; 
 import { validationResult } from "express-validator";
+import { WEAPON_TYPES } from '../utils/weaponTypes.js';
 
 export const getIndexPage = (req, res) => {
   res.render('index', { title: 'Mini Weapon Shop' });
@@ -7,10 +8,18 @@ export const getIndexPage = (req, res) => {
 
 export const getItemPage = async (req, res, next) => {
   try {
-    const { sort = 'id', order = 'asc', search = '' } = req.query;
-    const items = await db.getAllItems(sort, order, search);
+    const { sort = 'id', order = 'asc', search = '', type = '' } = req.query;
+    const items = await db.getAllItems(sort, order, search, type);
     console.log(items);
-    res.render('items', { title: 'Weapon Inventory', items, sort, order, search });
+    res.render('items', { 
+      title: 'Weapon Inventory', 
+      items, 
+      sort, 
+      order, 
+      search, 
+      type, 
+      weaponTypes: WEAPON_TYPES 
+    });
   } catch (err) {
     next(err);
   }
@@ -23,7 +32,8 @@ export const createNewItem = async (req, res, next) => {
     return res.render('new', { 
       title: 'Add Item',
       errors: errors.array(), 
-      formData: req.body
+      formData: req.body,
+      weaponTypes: WEAPON_TYPES
     });
   }
 
@@ -37,7 +47,7 @@ export const createNewItem = async (req, res, next) => {
 };
 
 export const getNewPage = (req, res) => {
-  res.render('new', { title: 'Add Item', errors: [], formData: {} });
+  res.render('new', { title: 'Add Item', errors: [], formData: {}, weaponTypes: WEAPON_TYPES });
 };
 
 export const getEditItemPage = async (req, res, next) => {
@@ -48,7 +58,8 @@ export const getEditItemPage = async (req, res, next) => {
       { title: 'Edit Item', 
         item: { id: itemId, ...item }, 
         errors: [], 
-        formData: {} 
+        formData: {},
+        weaponTypes: WEAPON_TYPES
       });
   } catch (err) {
     next(err);
@@ -64,7 +75,8 @@ export const editItem = async (req, res, next) => {
       title: 'Edit Item',
       item: { id: itemId, ...req.body }, 
       errors: errors.array(), 
-      formData: req.body
+      formData: req.body,
+      weaponTypes: WEAPON_TYPES
     });
   }
 
