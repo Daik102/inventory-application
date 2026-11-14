@@ -9,7 +9,17 @@
     </div>
     <div>
       <label for="item-type">Type: </label>
-      <input type="text" id="item-type" name="type" value="<%= item.type %>">
+      <select id="type" name="type">
+        <option value="">-- Select Weapon Type --</option>
+        <% weaponTypes.forEach((weaponType) => { %>
+          <option 
+            value="<%= weaponType %>" 
+            <%= (locals.item && item.type === weaponType) ? 'selected' : '' %>
+          >
+            <%= weaponType %>
+          </option>
+        <% }) %>
+      </select>
     </div>
     <div>
       <label for="item-stock">Stock: </label>
