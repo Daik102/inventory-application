@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS items (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name VARCHAR ( 100 ) NOT NULL,
   type VARCHAR ( 30 ) NOT NULL,
-  stock INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0),
-  cost INTEGER NOT NULL DEFAULT 0 CHECK (cost >= 1)
+  stock INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0 AND stock <= 99),
+  cost INTEGER NOT NULL DEFAULT 0 CHECK (cost >= 0 AND cost <= 99999)
 );
 
 INSERT INTO items (name, type, stock, cost) 
