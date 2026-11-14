@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { body } from 'express-validator';
 import * as controllers from "../controllers/itemController.js";
+import { WEAPON_TYPES } from "../utils/weaponTypes.js";
 
 export const itemsRouter = Router();
 
@@ -12,16 +13,16 @@ const validateItem = [
   body('type')
     .trim()
     .notEmpty().withMessage('** Enter item type **')
-    .isLength({ max: 30 }).withMessage('** Type cannot exceed 30 characters **'),
+    .isIn(WEAPON_TYPES).withMessage('** Invalid weapon type **'),
   body('stock')
     .trim()
     .notEmpty().withMessage('** Enter item stock **')
-    .isInt({ min: 0 }).withMessage('** Stock must be 0 or greater **')
+    .isInt({ min: 0, max: 99 }).withMessage('** Stock must be between 0 and 99 **')
     .toInt(),
   body('cost')
     .trim()
     .notEmpty().withMessage('** Enter item cost **')
-    .isInt({ min: 0 }).withMessage('** Cost must be 0 or greater **')
+    .isInt({ min: 0, max: 99999 }).withMessage('** Cost must be between 0 and 99999 **')
     .toInt()
 ];
 
