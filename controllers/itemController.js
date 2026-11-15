@@ -66,6 +66,11 @@ export const getEditItemPage = async (req, res, next) => {
   }
 };
 
+export const getActionPage = async (req, res) => {
+  const itemId = req.params.id;
+  res.render('action', { title: '** Select Action **', id: itemId });
+};
+
 export const editItem = async (req, res, next) => {
   const itemId = req.params.id;
   const errors = validationResult(req);

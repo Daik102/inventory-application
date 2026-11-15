@@ -29,6 +29,7 @@ const validateItem = [
 itemsRouter.get('/', controllers.getItemPage);
 itemsRouter.post('/', validateItem, controllers.createNewItem);
 itemsRouter.get('/new', controllers.getNewPage);
+itemsRouter.get('/:id', controllers.getActionPage);
 itemsRouter.get('/:id/edit', controllers.getEditItemPage);
 itemsRouter.post('/:id/edit', validateItem, controllers.editItem);
 itemsRouter.get('/:id/delete', controllers.getDeletePage);

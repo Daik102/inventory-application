@@ -1,0 +1,10 @@
+<%- include('partials/header', { title }) %>
+<main>
+  <h2>Select Action</h2>
+  <div class="action-links">
+    <a class="back-to-shop-link" href="/items">Back</a>
+    <a class="edit-link" href="/items/<%= id %>/edit">Edit</a>
+    <a class="delete-link" href="/items/<%= id %>/delete">Delete</a>
+  </div>
+</main>
+<%- include('partials/footer') %>
