@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import { WEAPON_TYPES } from '../utils/weaponTypes.js';
 
 export const getIndexPage = (req, res) => {
-  res.render('index', { title: 'Mini Weapon Shop' });
+  res.render('index', { title: '** Mini Weapon Shop **' });
 };
 
 export const getItemPage = async (req, res, next) => {
@@ -12,7 +12,7 @@ export const getItemPage = async (req, res, next) => {
     const items = await db.getAllItems(sort, order, search, type);
     console.log(items);
     res.render('items', { 
-      title: 'Weapon Inventory', 
+      title: '** Weapon Inventory **', 
       items, 
       sort, 
       order, 
@@ -30,7 +30,7 @@ export const createNewItem = async (req, res, next) => {
   
   if (!errors.isEmpty()) {
     return res.render('new', { 
-      title: 'Add Item',
+      title: '** Add Item **',
       errors: errors.array(), 
       formData: req.body,
       weaponTypes: WEAPON_TYPES
@@ -47,7 +47,7 @@ export const createNewItem = async (req, res, next) => {
 };
 
 export const getNewPage = (req, res) => {
-  res.render('new', { title: 'Add Item', errors: [], formData: {}, weaponTypes: WEAPON_TYPES });
+  res.render('new', { title: '** Add Item **', errors: [], formData: {}, weaponTypes: WEAPON_TYPES });
 };
 
 export const getEditItemPage = async (req, res, next) => {
@@ -55,7 +55,7 @@ export const getEditItemPage = async (req, res, next) => {
     const itemId = req.params.id;
     const item = await db.getItemById(itemId);
     res.render('edit', 
-      { title: 'Edit Item', 
+      { title: '** Edit Item **', 
         item: { id: itemId, ...item }, 
         errors: [], 
         formData: {},
@@ -72,7 +72,7 @@ export const editItem = async (req, res, next) => {
   
   if (!errors.isEmpty()) {
     return res.render('edit', { 
-      title: 'Edit Item',
+      title: '** Edit Item **',
       item: { id: itemId, ...req.body }, 
       errors: errors.array(), 
       formData: req.body,
@@ -93,7 +93,7 @@ export const editItem = async (req, res, next) => {
 export const getDeletePage = async (req, res) => {
   const itemId = req.params.id;
   const item = await db.getItemById(itemId);
-  res.render('delete', { title: 'Delete Item', id: itemId, name: item.name });
+  res.render('delete', { title: '** Delete Item **', id: itemId, name: item.name });
 };
 
 export const deleteItem = async (req, res, next) => {
