@@ -1,25 +1,23 @@
 <%- include('partials/header', { title }) %>
-<main>
-  <h1>Mini Weapon Shop</h1>
-  <!-- Add an id="search-input" and id="type-filter" to your form controls -->
-<form action="/items" method="GET" id="filter-form" class="rpg-filter-form">
-  <input 
-    type="text" 
-    id="search-input"
-    name="search" 
-    placeholder="Search item..." 
-    autocomplete="off"
-  />
-  <select id="type-filter" name="type">
-    <option value="">All Types</option>
-    <% weaponTypes.forEach((weaponType) => { %>
-      <option value="<%= weaponType %>"><%= weaponType %></option>
-    <% }) %>
-  </select>
-  <button type="button" id="clear-btn" style="display: none;">Clear</button>
-</form>
-  <a href="/items/new">Add Item</a>
-  <table class="rpg-table">
+<main class="items-main">
+  <form action="/items" method="GET" id="filter-form">
+    <input 
+      type="text" 
+      id="search-input"
+      name="search" 
+      placeholder="Search item..." 
+      autocomplete="off"
+    />
+    <select id="type-filter" name="type">
+      <option value="">All Types</option>
+      <% weaponTypes.forEach((weaponType) => { %>
+        <option value="<%= weaponType %>"><%= weaponType %></option>
+      <% }) %>
+    </select>
+    <button type="button" class="clear-btn">Clear</button>
+  </form>
+  <a class="add-item-link" href="/items/new">Add Item</a>
+  <table class="item-table">
     <thead>
       <tr>
         <th>
@@ -73,7 +71,7 @@
       <% } %>
     </tbody>
   </table>
-  <a href="/">Back</a>
+  <a class="back-home-link" href="/">Back</a>
 </main>
 <%- include('partials/footer') %>
 
@@ -81,7 +79,7 @@
   const filterForm = document.getElementById('filter-form');
   const searchInput = document.getElementById('search-input');
   const typeFilter = document.getElementById('type-filter');
-  const clearBtn = document.getElementById('clear-btn');
+  const clearBtn = document.querySelector('.clear-btn');
   const itemRows = document.querySelectorAll('.item-row');
   const noResultsRow = document.getElementById('no-results-row');
 
@@ -92,7 +90,7 @@
 
     // Show Clear button only when a filter is active
     const isFiltered = searchTerm !== '' || selectedType !== '';
-    clearBtn.style.display = isFiltered ? '' : 'none';
+    isFiltered ? clearBtn.classList.add('visible') : clearBtn.classList.remove('visible');
 
     itemRows.forEach((row) => {
       const itemName = row.children[0].textContent.toLowerCase();
