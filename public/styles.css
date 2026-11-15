@@ -1,0 +1,347 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #222;
+  --bg-hover: #333;
+  --border: #777;
+  --font: #fff;
+  --btn-hover-font: #000;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: var(--font);
+  transition: 0.15s;
+
+  &:hover {
+    color: var(--btn-hover-font);
+    background-color: var(--font);
+  }
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  transition: 0.15s;
+
+  &:hover {
+    color: var(--btn-hover-font);
+    background-color: var(--font);
+  }
+}
+
+input,
+select {
+  font-family: inherit;
+}
+
+body {
+  display: grid;
+  grid-template-rows: 2.5rem auto 2.5rem;
+  min-height: 100vh;
+  padding: 5rem 0 0.5rem;
+  font-family: monospace, Arial, Helvetica, sans-serif;
+  color: var(--font);
+  background-color: var(--bg);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10rem;
+}
+
+.items-main {
+  justify-content: initial;
+  margin-bottom: initial;
+}
+
+h1,
+.error-title {
+  text-align: center;
+  font-size: clamp(1.75rem, 1.675rem + 0.375vw, 2.125rem);
+}
+
+.error-message {
+  margin: 2rem 0;
+  font-size: 1.5rem;
+}
+
+.house-container {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto;
+  place-items: center;
+  place-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.roof, 
+.house,
+.chimney {
+  background-color: var(--font);
+}
+
+.roof {
+  width: 4.5rem;
+  height: 3rem;
+  clip-path: polygon(0 100%, 100% 0, 100% 100%);
+}
+
+.roof-right {
+  scale: -1 1;
+}
+
+.chimney {
+  position: absolute;
+  top: 0;
+  width: 1rem;
+  height: 2rem;
+}
+
+.chimney-left {
+  left: 3.5rem;
+}
+
+.chimney-right {
+  left: 5rem;
+}
+
+.house {
+  width: 3rem;
+  height: 2.5rem;
+}
+
+.house-left {
+  margin-left: 1.5rem;
+}
+
+.house-right {
+  margin-right: 1.5rem;
+}
+
+.entrance {
+  position: absolute;
+  left: 3.5rem;
+  top: 4.25rem;
+  width: 2.5rem;
+  height: 2rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background-color: var(--bg)
+}
+
+.enter-link,
+.back-home-link,
+.add-item-link,
+.back-to-shop-link {
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+}
+
+#filter-form {
+  display: flex;
+  gap: 1rem;
+  margin: 3.5rem 0 1.5rem 5.5rem;
+}
+
+#search-input,
+#type-filter {
+  padding: 0.25rem;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+#type-filter {
+  color: var(--font);
+  background-color: var(--bg);
+  border: 0.1rem solid var(--font);
+  cursor: pointer;
+}
+
+.clear-btn {
+  visibility: hidden;
+  padding: 0.25rem 0.75rem;
+  font-size: 1rem;
+  color: var(--font);
+  background-color: var(--bg);
+}
+
+.visible {
+  visibility: visible;
+}
+
+.item-table {
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  border: 0.2rem double var(--font);
+}
+
+.item-table thead a:hover {
+  color: inherit;
+  background-color: inherit;
+}
+
+.item-table th,
+.item-table td {
+  height: 3rem;
+  padding: 0 1rem;
+  border-bottom: 0.1rem solid var(--border);
+  text-align: left;
+}
+
+.item-table th:nth-child(1),
+.item-table td:nth-child(1) {
+  width: 16rem;
+  position: relative;
+  padding-left: 1.75rem;
+}
+
+.item-table th:nth-child(2),
+.item-table td:nth-child(2) {
+  width: 6rem;
+}
+
+.item-table th:nth-child(3),
+.item-table td:nth-child(3),
+.item-table th:nth-child(4),
+.item-table td:nth-child(4) {
+  width: 6.25rem;
+  text-align: center;
+}
+
+.item-table td:nth-child(4) {
+  text-align: right;
+}
+
+.item-table th:nth-child(5),
+.item-table td:nth-child(5) {
+  width: 5.75rem;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.action-buttons a {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  border: 0.1rem solid var(--font);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.item-table td:first-child::before {
+  content: "▶";
+  position: absolute;
+  left: 0.625rem;
+  color: var(--font);
+  opacity: 0;
+}
+
+.item-table tbody tr:hover td:first-child::before {
+  opacity: 1;
+}
+
+.item-table tbody tr:hover {
+  background-color: var(--bg-hover);
+}
+
+#add-form,
+#edit-form,
+#delete-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+#add-form h2,
+#edit-form h2,
+#delete-form h2 {
+  margin-bottom: 1rem;
+}
+
+#add-form div,
+#edit-form div {
+  align-self: end;
+  margin-right: 4.25rem;
+}
+
+#add-form label,
+#edit-form label {
+  font-size: 1.125rem;
+}
+
+#add-form input,
+#add-form select,
+#edit-form input,
+#edit-form select {
+  font-size: 1rem;
+  padding: 0.25rem;
+}
+
+#add-form select,
+#edit-form select {
+  width: 13.875rem;
+}
+
+.error-display {
+  font-size: 1.25rem;
+}
+
+.add-btn-row,
+.edit-btn-row,
+.delete-btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.add-btn,
+.edit-btn,
+.delete-btn {
+  width: 5rem;
+  padding: 0.5rem 0;
+  font-size: 1.25rem;
+  color: var(--font);
+  background-color: var(--bg);
+}
+
+.delete-btn {
+  width: 6rem;
+}
+
+footer {
+  text-align: center;
+}
+
+footer a {
+  padding: 0.5rem 0.75rem;
+  color: var(--font);
+}
+
+@media screen and (min-width: 22.5em) {
+  
+}
+
+@media screen and (min-width: 24.25em) {
+  
+}
+
+@media screen and (min-width: 48em) {
+  
+}
