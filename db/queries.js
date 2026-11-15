@@ -18,8 +18,6 @@ export async function getAllItems(sort = 'id', order = 'asc', search = '', type 
 
   const { rows } = await pool.query(query, params);
   return rows;
-
-  //const { rows } = await pool.query("SELECT * FROM items ORDER BY cost ASC");
 }
 
 export async function insertItem({ name, type, stock, cost }) {
