@@ -1,7 +1,6 @@
 <%- include('partials/header', { title }) %>
 <main>
-  <h1>Mini Weapon Shop</h1>
-  <form method="POST" action="/items/<%= item.id %>/edit">
+  <form method="POST" action="/items/<%= item.id %>/edit" id="edit-form">
     <h2>Edit Item</h2>
     <div>
       <label for="item-name">Item: </label>
@@ -36,8 +35,10 @@
         &nbsp;
       <% } %>
     </p>
-    <a href="/items">Back</a>
-    <button type="submit">Edit</button>
+    <span class="edit-btn-row">
+      <a class="back-to-shop-link" href="/items">Back</a>
+      <button class="edit-btn" type="submit">Edit</button>
+    </span>
   </form>
 </main>
 <%- include('partials/footer') %>
