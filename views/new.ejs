@@ -1,7 +1,6 @@
 <%- include('partials/header', { title }) %>
 <main>
-  <h1>Mini Weapon Shop</h1>
-  <form method="POST" action="/items">
+  <form method="POST" action="/items" id="add-form">
     <h2>New Item</h2>
     <div>
       <label for="item-name">Item: </label>
@@ -10,7 +9,7 @@
     <div>
       <label for="item-type">Type: </label>
       <select id="type" name="type">
-        <option value="">-- Select Weapon Type --</option>
+        <option value="">-- Select Type --</option>
         <% weaponTypes.forEach((weaponType) => { %>
           <option 
             value="<%= weaponType %>" 
@@ -36,8 +35,10 @@
         &nbsp;
       <% } %>
     </p>
-    <a href="/items">Back</a>
-    <button type="submit">Add</button>
+    <span class="add-btn-row">
+      <a class="back-to-shop-link" href="/items">Back</a>
+      <button class="add-btn" type="submit">Add</button>
+    </span>
   </form>
 </main>
 <%- include('partials/footer') %>
