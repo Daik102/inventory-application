@@ -47,7 +47,12 @@ export const createNewItem = async (req, res, next) => {
 };
 
 export const getNewPage = (req, res) => {
-  res.render('new', { title: '** Add Item **', errors: [], formData: {}, weaponTypes: WEAPON_TYPES });
+  res.render('new', 
+    { title: '** Add Item **', 
+      errors: [], 
+      formData: {}, 
+      weaponTypes: WEAPON_TYPES 
+    });
 };
 
 export const getEditItemPage = async (req, res, next) => {
@@ -68,7 +73,10 @@ export const getEditItemPage = async (req, res, next) => {
 
 export const getActionPage = async (req, res) => {
   const itemId = req.params.id;
-  res.render('action', { title: '** Select Action **', id: itemId });
+  res.render('action', 
+    { title: '** Select Action **', 
+      id: itemId 
+    });
 };
 
 export const editItem = async (req, res, next) => {
@@ -98,7 +106,11 @@ export const editItem = async (req, res, next) => {
 export const getDeletePage = async (req, res) => {
   const itemId = req.params.id;
   const item = await db.getItemById(itemId);
-  res.render('delete', { title: '** Delete Item **', id: itemId, name: item.name });
+  res.render('delete', 
+    { title: '** Delete Item **', 
+      id: itemId, 
+      name: item.name 
+    });
 };
 
 export const deleteItem = async (req, res, next) => {
