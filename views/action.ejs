@@ -1,10 +1,15 @@
 <%- include('partials/header', { title }) %>
 <main>
-  <h2>Select Action</h2>
+  <h2 class="item-stats-title"><%= item.name %></h2>
+  <ul class="item-stats">
+    <li><strong>Type:</strong> <%= item.type %></li>
+    <li><strong>Stock:</strong> <%= item.stock %></li>
+    <li><strong>Cost:</strong> <%= item.cost %>G</li>
+  </ul>
   <div class="action-links">
     <a class="back-to-shop-link" href="/items">Back</a>
-    <a class="edit-link" href="/items/<%= id %>/edit">Edit</a>
-    <a class="delete-link" href="/items/<%= id %>/delete">Delete</a>
+    <a class="edit-link" href="/items/<%= item.id %>/edit">Edit</a>
+    <a class="delete-link" href="/items/<%= item.id %>/delete">Delete</a>
   </div>
 </main>
 <%- include('partials/footer') %>
