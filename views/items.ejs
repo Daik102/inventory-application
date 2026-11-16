@@ -20,53 +20,28 @@
   <table class="item-table">
     <thead>
       <tr>
-        <th>
-          <a href="/items?sort=name&order=<%= sort === 'name' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>&type=<%= encodeURIComponent(type || '') %>">
-            Item <%= sort === 'name' ? (order === 'asc' ? '▲' : '▼') : '' %>
-          </a>
-        </th>
-        <th>
-          <a href="/items?sort=type&order=<%= sort === 'type' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>&type=<%= encodeURIComponent(type || '') %>">
-            Type <%= sort === 'type' ? (order === 'asc' ? '▲' : '▼') : '' %>
-          </a>
-        </th>
-        <th class="num">
-          <a href="/items?sort=stock&order=<%= sort === 'stock' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>&type=<%= encodeURIComponent(type || '') %>">
-            Stock <%= sort === 'stock' ? (order === 'asc' ? '▲' : '▼') : '' %>
-          </a>
-        </th>
-        <th class="num">
-          <a href="/items?sort=cost&order=<%= sort === 'cost' && order === 'asc' ? 'desc' : 'asc' %>&search=<%= encodeURIComponent(search) %>&type=<%= encodeURIComponent(type || '') %>">
-            Cost <%= sort === 'cost' ? (order === 'asc' ? '▲' : '▼') : '' %>
-          </a>
-        </th>
-        <th></th>
+        <th class="sortable" data-col="0" data-type="text" tabindex="0">Item <span class="sort-icon"></span></th>
+        <th class="sortable" data-col="1" data-type="text" tabindex="0">Type <span class="sort-icon"></span></th>
+        <th class="sortable num" data-col="2" data-type="num" tabindex="0">Stock <span class="sort-icon"></span></th>
+        <th class="sortable num" data-col="3" data-type="num" tabindex="0">Cost <span class="sort-icon"></span></th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="items-tbody">
       <% if (items.length === 0) { %>
         <tr>
-          <td colspan="5">No items in stock. Add some gear!</td>
+          <td colspan="4">No items in stock. Add some gear!</td>
         </tr>
       <% } else { %>
         <% items.forEach((item) => { %>
-          <tr class="item-row">
+          <tr class="item-row" data-href="/items/<%= item.id %>" tabindex="0">
             <td><%= item.name %></td>
             <td><%= item.type %></td>
             <td class="num"><%= item.stock %></td>
-            <td class="num"><%= item.cost %> G</td>
-            <td>
-              <div class="action-buttons">
-                <a href="/items/<%= item.id %>/edit">E</a>
-                <a href="/items/<%= item.id %>/delete">X</a>
-              </div>
-            </td>
+            <td class="num"><%= item.cost %>G</td>
           </tr>
         <% }) %>
-
-        <!-- Hidden by default; revealed by JS when 0 rows match -->
         <tr id="no-results-row" style="display: none;">
-          <td colspan="5">No matching gear found!</td>
+          <td colspan="4">No matching gear found!</td>
         </tr>
       <% } %>
     </tbody>
@@ -76,21 +51,37 @@
 <%- include('partials/footer') %>
 
 <script>
-  const filterForm = document.getElementById('filter-form');
   const searchInput = document.getElementById('search-input');
   const typeFilter = document.getElementById('type-filter');
   const clearBtn = document.querySelector('.clear-btn');
-  const itemRows = document.querySelectorAll('.item-row');
+  const tbody = document.getElementById('items-tbody');
+  const itemRows = Array.from(document.querySelectorAll('.item-row'));
   const noResultsRow = document.getElementById('no-results-row');
+  const headers = document.querySelectorAll('th.sortable');
 
+  let currentSortCol = null;
+  let currentSortOrder = 'asc';
+
+  // 1. Clickable Rows -> Navigate to /items/:id
+  itemRows.forEach((row) => {
+    row.addEventListener('click', () => {
+      window.location.href = row.dataset.href;
+    });
+
+    row.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        window.location.href = row.dataset.href;
+      }
+    });
+  });
+
+  // 2. Live Search & Type Filter
   function filterRows() {
     const searchTerm = searchInput.value.toLowerCase().trim();
     const selectedType = typeFilter.value;
     let visibleCount = 0;
 
-    // Show Clear button only when a filter is active
-    const isFiltered = searchTerm !== '' || selectedType !== '';
-    isFiltered ? clearBtn.classList.add('visible') : clearBtn.classList.remove('visible');
+    searchTerm !== '' || selectedType !== '' ? clearBtn.classList.add('visible') : clearBtn.classList.remove('visible');
 
     itemRows.forEach((row) => {
       const itemName = row.children[0].textContent.toLowerCase();
@@ -107,19 +98,71 @@
       }
     });
 
-    // Toggle the "No matching gear found!" row
     if (noResultsRow) {
       noResultsRow.style.display = visibleCount === 0 ? '' : 'none';
     }
   }
 
-  filterForm.addEventListener('submit', (e) => e.preventDefault());
   searchInput.addEventListener('input', filterRows);
   typeFilter.addEventListener('change', filterRows);
-
+  
   clearBtn.addEventListener('click', () => {
     searchInput.value = '';
     typeFilter.value = '';
     filterRows();
+  });
+
+  // 3. Instant Column Sorting
+  function sortColumns(header) {
+    const colIndex = parseInt(header.dataset.col, 10);
+    const dataType = header.dataset.type;
+
+    // Toggle asc / desc
+    if (currentSortCol === colIndex) {
+      currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      currentSortCol = colIndex;
+      currentSortOrder = 'asc';
+    }
+
+    // Update ▲ / ▼ indicators
+    headers.forEach((h) => (h.querySelector('.sort-icon').textContent = ''));
+    header.querySelector('.sort-icon').textContent = currentSortOrder === 'asc' ? '▲' : '▼';
+
+    // Sort the array of <tr> elements
+    const sortedRows = [...itemRows].sort((a, b) => {
+      const valA = a.children[colIndex].textContent.trim();
+      const valB = b.children[colIndex].textContent.trim();
+
+      if (dataType === 'num') {
+        // Strip " G" from Cost and parse as integers
+        const numA = parseInt(valA.replace(/[^0-9-]/g, ''), 10);
+        const numB = parseInt(valB.replace(/[^0-9-]/g, ''), 10);
+        return currentSortOrder === 'asc' ? numA - numB : numB - numA;
+      } else {
+        return currentSortOrder === 'asc'
+          ? valA.localeCompare(valB)
+          : valB.localeCompare(valA);
+      }
+    });
+
+    // Re-append sorted rows into <tbody> (keeping #no-results-row at the bottom)
+    sortedRows.forEach((row) => tbody.appendChild(row));
+
+    if (noResultsRow) {
+      tbody.appendChild(noResultsRow);
+    }
+  }
+  
+  headers.forEach((header) => {
+    header.addEventListener('click', () => {
+      sortColumns(header);
+    });
+
+    header.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        sortColumns(header);
+      }
+    });
   });
 </script>
