@@ -3,7 +3,7 @@
   <form method="POST" action="/items/<%= id %>/delete" id="delete-form">
     <h2>Delete <%= name %>?</h2>
     <span class="delete-btn-row">
-      <a class="back-to-shop-link" href="/items">Back</a>
+      <a class="back-to-shop-link" href="/items/<%= id %>">Back</a>
       <button class="delete-btn" type="submit">Delete</button>
     </span>
   </form>
