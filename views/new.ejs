@@ -4,7 +4,13 @@
     <h2>New Item</h2>
     <div>
       <label for="item-name">Item: </label>
-      <input type="text" id="item-name" name="name" value="<%= formData.name || '' %>">
+      <input 
+        type="text" 
+        id="item-name" 
+        name="name" 
+        value="<%= formData.name || '' %>" 
+        autocomplete="off"
+      >
     </div>
     <div>
       <label for="item-type">Type: </label>
