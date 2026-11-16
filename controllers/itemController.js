@@ -9,7 +9,6 @@ export const getIndexPage = (req, res) => {
 export const getItemPage = async (req, res, next) => {
   try {
     const items = await db.getAllItems();
-    console.log(items);
     res.render('items', { 
       title: '** Weapon Inventory **', 
       items, 
