@@ -310,11 +310,15 @@ h1,
 }
 
 #add-form input,
-#add-form select,
-#edit-form input,
-#edit-form select {
+#edit-form input {
   font-size: 1rem;
   padding: 0.25rem;
+}
+
+#add-form select,
+#edit-form select {
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
 }
 
 .error-display {
