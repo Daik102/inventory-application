@@ -1,22 +1,7 @@
 import { pool } from "./pool.js";
 
-export async function getAllItems(sort = 'id', order = 'asc', search = '', type = '') {
-  // Whitelist allowed column names and sort directions
-  const allowedColumns = ['name', 'type', 'stock', 'cost'];
-  const safeColumn = allowedColumns.includes(sort) ? sort : 'id';
-  const safeOrder = order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
-
-  const params = [`%${search.trim()}%`];
-  let query = `SELECT * FROM items WHERE name ILIKE $1`;
-
-  if (type) {
-    params.push(type);
-    query += ` AND type = $${params.length}`;
-  }
-
-  query += ` ORDER BY ${safeColumn} ${safeOrder}`;
-
-  const { rows } = await pool.query(query, params);
+export async function getAllItems() {
+  const { rows } = await pool.query('SELECT * FROM items ORDER BY id ASC');
   return rows;
 }
 

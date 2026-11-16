@@ -8,16 +8,11 @@ export const getIndexPage = (req, res) => {
 
 export const getItemPage = async (req, res, next) => {
   try {
-    const { sort = 'id', order = 'asc', search = '', type = '' } = req.query;
-    const items = await db.getAllItems(sort, order, search, type);
+    const items = await db.getAllItems();
     console.log(items);
     res.render('items', { 
       title: '** Weapon Inventory **', 
       items, 
-      sort, 
-      order, 
-      search, 
-      type, 
       weaponTypes: WEAPON_TYPES 
     });
   } catch (err) {
@@ -72,10 +67,10 @@ export const getEditItemPage = async (req, res, next) => {
 };
 
 export const getActionPage = async (req, res) => {
-  const itemId = req.params.id;
+  const item = await db.getItemById(req.params.id);
   res.render('action', 
-    { title: '** Select Action **', 
-      id: itemId 
+    { title: '** Item Stats **', 
+      item 
     });
 };
 
