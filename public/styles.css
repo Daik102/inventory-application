@@ -229,9 +229,9 @@ h1,
 
 .item-table th:nth-child(1),
 .item-table td:nth-child(1) {
+  position: relative;
   min-width: 10.5rem;
   padding-left: 1rem;
-  position: relative;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -242,17 +242,13 @@ h1,
 }
 
 .item-table th:nth-child(3),
-.item-table td:nth-child(3),
-.item-table th:nth-child(4) {
+.item-table td:nth-child(3) {
   text-align: center;
 }
 
 .item-table th:nth-child(4),
 .item-table td:nth-child(4) {
   padding-right: 1rem;
-}
-
-.item-table td:nth-child(4) {
   text-align: right;
 }
 
