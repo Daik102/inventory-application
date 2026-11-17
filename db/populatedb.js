@@ -17,7 +17,7 @@ VALUES
   ('Oak Spear', 'Spear', 5, 150),
   ('Wood Arrow', 'Arrow', 2, 180),
   ('Bronze Sword', 'Sword', 7, 70),
-  ('Golden Axe', 'Axe', 2, 1500),
+  ('Golden Axe', 'Axe', 2, 15000),
   ('Thunder Rod', 'Rod', 10, 300),
   ('Steel Hammer', 'Hammer', 3, 500),
   ('Shuriken', 'Others', 1, 1000);
